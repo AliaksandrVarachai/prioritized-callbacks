@@ -1,0 +1,15 @@
+{
+  "name": "prioritized-callbacks",
+  "version": "1.0.0",
+  "description": "Call of callbacks in the order of their priorities",
+  "main": "index.js",
+  "scripts": {
+    "test": "node \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "empty"
+  },
+  "author": "AliaksandrVarachai",
+  "license": "ISC"
+}
