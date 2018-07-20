@@ -1,4 +1,4 @@
-import getPrioritizedMiddleware from './index';
+import getPrioritizedMiddleware from './src/index_old';
 
 function f1(next) {
   setTimeout(() => {

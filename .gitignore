@@ -1,0 +1,6 @@
+# Generated files
+dist-*/
+*.log
+
+# External dependencies
+node_modules/

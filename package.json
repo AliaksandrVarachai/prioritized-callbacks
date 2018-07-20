@@ -1,15 +1,29 @@
 {
   "name": "prioritized-callbacks",
   "version": "1.0.0",
-  "description": "Call of callbacks in the order of their priorities",
-  "main": "index.js",
+  "description": "Script to synchronize html injections in a dynamically updated DOM",
+  "main": "html-injector.js",
   "scripts": {
-    "test": "node \"Error: no test specified\" && exit 1"
+    "start": "cross-env webpack-dev-server --hot --mode=development --env.tool=tableau",
+    "build": "cross-env webpack --mode=production --env.tool=tableau"
   },
-  "repository": {
-    "type": "git",
-    "url": "empty"
+  "repository": "empty",
+  "engines": {
+    "node": ">=8"
   },
   "author": "AliaksandrVarachai",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "clean-webpack-plugin": "^0.1.19",
+    "cross-env": "^5.2.0",
+    "fs": "0.0.1-security",
+    "uglifyjs-webpack-plugin": "^1.2.7",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.4"
+  }
 }
