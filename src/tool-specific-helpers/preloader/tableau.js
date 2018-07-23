@@ -1,4 +1,4 @@
-import { EVENTS } from '../../constants/client';
+import { EVENTS } from '../../constants';
 import globals from '../globals';
 import eventBusFactory from '../../helpers/event-bus-factory';
 
