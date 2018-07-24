@@ -5,6 +5,7 @@
   "main": "html-injector.js",
   "scripts": {
     "start": "cross-env webpack-dev-server --hot --mode=development --env.tool=tableau",
+    "start-with-remote-tool": "cross-env webpack-dev-server --hot --mode=development --env.tool=tableau --env.remoteTool",
     "build": "cross-env webpack --mode=production --env.tool=tableau"
   },
   "repository": "empty",

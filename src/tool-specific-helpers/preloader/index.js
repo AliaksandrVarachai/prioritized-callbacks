@@ -12,7 +12,7 @@ let preloader;
 
 switch (process.env.NODE_TOOL) {
   case 'tableau':
-    preloader = process.env.IS_WEBPACK_DEV_SERVER_STARTED
+    preloader = process.env.IS_WEBPACK_DEV_SERVER_STARTED && !process.env.NODE_IS_REMOTE_TOOL
       ? mock
       : require('./tableau');
     break;

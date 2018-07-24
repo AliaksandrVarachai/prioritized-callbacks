@@ -14,7 +14,7 @@ module.exports = function(env, argv) {
 
   return {
     entry: {
-      'html-injector': './src/index'
+      'event-bus': './src/index'
     },
     output: {
       filename: '[name].js',
@@ -30,6 +30,7 @@ module.exports = function(env, argv) {
         // 'process.env.NODE_ENV': JSON.stringify(argv.mode), will be set by Webpack mode option
         'process.env.NODE_TOOL': JSON.stringify(env.tool),
         'process.env.NODE_IS_WEBPACK_DEV_SERVER_STARTED': JSON.stringify(isWebpackDevServerStarted),
+        'process.env.NODE_IS_REMOTE_TOOL': !!env.remoteTool,
       }),
     ].filter(Boolean),
     module: {
