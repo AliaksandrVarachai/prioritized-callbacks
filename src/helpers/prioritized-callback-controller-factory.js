@@ -1,11 +1,17 @@
+import eventBusFactory from './event-bus-factory';
+
+const eventBus = eventBusFactory();
+
 function PrioritizedCallbackController() {
   this.busEvents = {}; //{priorities: []<number>, callbacks: []<function>}
 }
 
 PrioritizedCallbackController.prototype.addCallback = function(eventName, priority, callback) {
+  // TODO: add extra call when new callback is added (priorities are changed)
   const busEvent = this.busEvents[eventName];
   if (!busEvent) {
     this.busEvents[eventName] = {priorities: [priority], callbacks: [callback]};
+    eventBus.addEventListener(eventName, () => this.runCallbacks(eventName));
     return;
   }
   for (let i = 0; i < busEvent.priorities.length; i++) {
