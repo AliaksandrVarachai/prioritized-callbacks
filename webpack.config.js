@@ -1,9 +1,11 @@
 const webpack = require('webpack');
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const fs = require('fs');
 
 const src = path.resolve(__dirname, 'src');
+const resources = path.resolve(__dirname, 'resources');
 const devServerKey = fs.readFileSync('./resources/ssl/dev-server-key.pem');
 const devServerCert = fs.readFileSync('./resources/ssl/dev-server-cert.pem');
 
@@ -13,9 +15,14 @@ module.exports = function(env, argv) {
   const dist = path.resolve(__dirname, 'dist-' + env.tool);
 
   return {
-    entry: {
-      'event-bus': './src/index'
-    },
+    entry: isWebpackDevServerStarted
+      ? {
+        'event-bus': './src/index',
+        'event-bus-test': './resources/event-bus-test'
+      }
+      : {
+        'event-bus': './src/index'
+      },
     output: {
       filename: '[name].js',
       path: dist,
@@ -32,6 +39,7 @@ module.exports = function(env, argv) {
         'process.env.NODE_IS_WEBPACK_DEV_SERVER_STARTED': JSON.stringify(isWebpackDevServerStarted),
         'process.env.NODE_IS_REMOTE_TOOL': !!env.remoteTool,
       }),
+      isWebpackDevServerStarted ? new HtmlWebpackPlugin() : null,
     ].filter(Boolean),
     module: {
       rules: [

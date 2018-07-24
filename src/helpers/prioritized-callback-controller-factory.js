@@ -3,13 +3,13 @@ import eventBusFactory from './event-bus-factory';
 const eventBus = eventBusFactory();
 
 function PrioritizedCallbackController() {
-  this.busEvents = {}; //{priorities: []<number>, callbacks: []<function>, rollbacks: []<function>}
+  this.pEvents = {}; //{priorities: []<number>, callbacks: []<function>, rollbacks: []<function>}
 }
 
 PrioritizedCallbackController.prototype.addCallback = function(eventName, priority, callback, rollback) {
-  const busEvent = this.busEvents[eventName];
+  const busEvent = this.pEvents[eventName];
   if (!busEvent) {
-    this.busEvents[eventName] = {
+    this.pEvents[eventName] = {
       priorities: [priority],
       callbacks: [callback],
       rollbacks: [rollback]
@@ -18,6 +18,7 @@ PrioritizedCallbackController.prototype.addCallback = function(eventName, priori
     this.runCallbacks(eventName);
     return;
   }
+  this.runRollbacks(eventName);
   for (let i = 0; i < busEvent.priorities.length; i++) {
     if (priority === busEvent.priorities[i])
       throw Error(`Priority ${priority} of "${eventName}" is already used. The list of used priorities: [${busEvent.priorities.join()}]`);
@@ -28,20 +29,19 @@ PrioritizedCallbackController.prototype.addCallback = function(eventName, priori
       break;
     }
   }
-  this.runRollbacks(eventName);
   this.runCallbacks(eventName);
 };
 
 PrioritizedCallbackController.prototype.runCallbacks = function(eventName) {
-  if (!this.busEvents[eventName])
+  if (!this.pEvents[eventName])
     throw Error(`No callbacks for bus event "${eventName}"`);
-  Object.keys(this.busEvents[eventName].callbacks).forEach(callback => callback());
+  this.pEvents[eventName].callbacks.forEach(callback => callback());
 };
 
 PrioritizedCallbackController.prototype.runRollbacks = function(eventName) {
-  if (!this.busEvents[eventName])
+  if (!this.pEvents[eventName])
     throw Error(`No rollbacks for bus event "${eventName}"`);
-  Object.keys(this.busEvents[eventName].rollbacks).forEach(rollback => rollback());
+  this.pEvents[eventName].rollbacks.forEach(rollback => rollback());
 };
 
 let singletonPrioritizedCallbackController;

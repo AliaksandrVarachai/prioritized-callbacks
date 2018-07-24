@@ -2,7 +2,7 @@ let globals;
 
 switch (process.env.NODE_TOOL) {
   case 'tableau':
-    globals = process.env.IS_WEBPACK_DEV_SERVER_STARTED && !process.env.NODE_IS_REMOTE_TOOL
+    globals = process.env.NODE_IS_WEBPACK_DEV_SERVER_STARTED && !process.env.NODE_IS_REMOTE_TOOL
       ? require('../mocked-data/tableau')
       : require('./tableau');
     break;
