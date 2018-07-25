@@ -33,8 +33,9 @@ EventBus.prototype.removeEventListener = function(eventName, callback) {
 };
 
 EventBus.prototype.dispatch = function(eventName, event = {}) {
-  this._throwIfWrongEventName(eventName, true);
-  this.listeners[eventName].forEach(listener => listener(event));
+  this._throwIfWrongEventName(eventName, false);
+  if (this.listeners[eventName] instanceof Array)
+    this.listeners[eventName].forEach(listener => listener(event));
 };
 
 

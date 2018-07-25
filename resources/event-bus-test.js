@@ -1,6 +1,9 @@
 // TODO: move out the example to Readme file
-const prioritizedCbController = require('../src/helpers/prioritized-callback-controller-factory').default();
-const { EVENTS } = require('../src/constants');
+import prioritizedCallbackControllerFactory from '../src/helpers/prioritized-callback-controller-factory';
+import { EVENTS } from '../src/constants';
+import globals from '../src/tool-specific-helpers/globals';
+
+const prioritizedCbController = prioritizedCallbackControllerFactory();
 
 function addPrioritizedDiv(priority) {
   const div = document.createElement('div');
@@ -26,9 +29,12 @@ function addPrioritizedDiv(priority) {
 const descriptionDiv = document.createElement('div');
 document.body.innerHTML =
   '<div style="padding-bottom: 10px">' +
-    'Here sould be a list of blocks sorted in ascending order by the priority (to see the log open the console):' +
+    'Here should be a list of blocks sorted in ascending order by the priority (to see the log open the console):' +
   '</div>'
 document.body.appendChild(descriptionDiv);
+
+globals.emulateEventsLocally(); // emulates events
+
 setTimeout(() => addPrioritizedDiv(10), 1000);
 setTimeout(() => addPrioritizedDiv(20), 500);
 addPrioritizedDiv(30);

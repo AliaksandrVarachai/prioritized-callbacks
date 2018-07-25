@@ -1,4 +1,6 @@
 import preloader from './tool-specific-helpers/preloader';
-
-// when EVENTS.LOAD_FEEDBACK is fired sets window.__toolIsReadyToAddFeedbackButtons = true
+/**
+ * Provides global variables:
+ * window.eventBus {object} - processes tool-specific events and fires eventBus's custom events.
+ */
 preloader.run();

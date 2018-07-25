@@ -17,8 +17,7 @@ module.exports = function(env, argv) {
   return {
     entry: isWebpackDevServerStarted
       ? {
-        'event-bus': './src/index',
-        'event-bus-test': './resources/event-bus-test'
+        'event-bus': ['./src/index', './resources/event-bus-test']
       }
       : {
         'event-bus': './src/index'
