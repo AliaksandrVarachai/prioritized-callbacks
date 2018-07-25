@@ -1,5 +1,8 @@
+import { EVENTS } from '../constants';
+
 function EventBus() {
   this.listeners = {};
+  this.eventNames = EVENTS;
 }
 
 EventBus.prototype.addEventListener = function(eventName, callback) {

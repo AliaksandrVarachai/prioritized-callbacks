@@ -19,8 +19,8 @@ function PrioritizedCallbackController() {
 }
 
 PrioritizedCallbackController.prototype.addCallback = function(eventName, priority, callback, rollback) {
-  const busEvent = this.pEvents[eventName];
-  if (!busEvent) {
+  const pEvent = this.pEvents[eventName];
+  if (!pEvent) {
     this.pEvents[eventName] = {
       priorities: [priority],
       callbacks: [callback],
@@ -35,13 +35,13 @@ PrioritizedCallbackController.prototype.addCallback = function(eventName, priori
   // TODO: call rollback only when order of priorities is changed
   if (this.callCallbacksWhenAdd)
     this.runRollbacks(eventName);
-  for (let i = 0; i < busEvent.priorities.length; i++) {
-    if (priority === busEvent.priorities[i])
-      throw Error(`Priority ${priority} of "${eventName}" is already used. The list of used priorities: [${busEvent.priorities.join()}]`);
-    if (priority < busEvent.priorities[i]) {
-      busEvent.priorities.splice(i, 0, priority);
-      busEvent.callbacks.splice(i, 0, callback);
-      busEvent.rollbacks.splice(i, 0, rollback);
+  for (let i = 0; i < pEvent.priorities.length; i++) {
+    if (priority === pEvent.priorities[i])
+      throw Error(`Priority ${priority} of "${eventName}" is already used. The list of used priorities: [${pEvent.priorities.join()}]`);
+    if (priority < pEvent.priorities[i]) {
+      pEvent.priorities.splice(i, 0, priority);
+      pEvent.callbacks.splice(i, 0, callback);
+      pEvent.rollbacks.splice(i, 0, rollback);
       break;
     }
   }
