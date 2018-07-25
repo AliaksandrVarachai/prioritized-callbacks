@@ -35,15 +35,15 @@ PrioritizedCallbackController.prototype.addCallback = function(eventName, priori
         callbacks: [callback],
         rollbacks: [rollback]
       };
-      eventBus.addEventListener(_eventName, () => this.runCallbacks(_eventName));
+      eventBus.addEventListener(_eventName, () => this._runCallbacks(_eventName));
       if (this.callCallbacksWhenAdd)
-        this.runCallbacks(_eventName);
+        this._runCallbacks(_eventName);
       return;
     }
 
     // TODO: call rollback only when order of priorities is changed
     if (this.callCallbacksWhenAdd)
-      this.runRollbacks(_eventName);
+      this._runRollbacks(_eventName);
     for (let i = 0; i < pEvent.priorities.length; i++) {
       if (priority === pEvent.priorities[i])
         throw Error(`Priority ${priority} of "${_eventName}" is already used. The list of used priorities: [${pEvent.priorities.join()}]`);
@@ -55,20 +55,8 @@ PrioritizedCallbackController.prototype.addCallback = function(eventName, priori
       }
     }
     if (this.callCallbacksWhenAdd)
-      this.runCallbacks(_eventName);
+      this._runCallbacks(_eventName);
   });
-};
-
-PrioritizedCallbackController.prototype.runCallbacks = function(eventName) {
-  if (!this.pEvents[eventName])
-    throw Error(`No callbacks for bus event "${eventName}"`);
-  this.pEvents[eventName].callbacks.forEach(callback => callback());
-};
-
-PrioritizedCallbackController.prototype.runRollbacks = function(eventName) {
-  if (!this.pEvents[eventName])
-    throw Error(`No rollbacks for bus event "${eventName}"`);
-  this.pEvents[eventName].rollbacks.forEach(rollback => rollback());
 };
 
 PrioritizedCallbackController.prototype.setCallCallbacksWhenAdd = function(callCallbacksWhenAdd) {
@@ -77,6 +65,18 @@ PrioritizedCallbackController.prototype.setCallCallbacksWhenAdd = function(callC
 
 PrioritizedCallbackController.prototype.getCallCallbacksWhenAdd = function() {
   return this.callCallbacksWhenAdd;
+};
+
+PrioritizedCallbackController.prototype._runCallbacks = function(eventName) {
+  if (!this.pEvents[eventName])
+    throw Error(`No callbacks for bus event "${eventName}"`);
+  this.pEvents[eventName].callbacks.forEach(callback => callback());
+};
+
+PrioritizedCallbackController.prototype._runRollbacks = function(eventName) {
+  if (!this.pEvents[eventName])
+    throw Error(`No rollbacks for bus event "${eventName}"`);
+  this.pEvents[eventName].rollbacks.forEach(rollback => rollback());
 };
 
 let singletonPrioritizedCallbackController;
