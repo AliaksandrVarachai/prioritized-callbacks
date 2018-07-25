@@ -24,7 +24,7 @@
     },
     'feedback-tool': {
       srcPrefix: 'https://ecsb00100c96.epam.com:444/feedback-tool',
-      cookieTestKey: 'test_fb_path'
+      cookieTestKey: 'test_ft_path'
     },
     'guided-tour': {
       srcPrefix: 'https://ecsb00100c96.epam.com:444/guided-tour',
