@@ -1,14 +1,12 @@
 // TODO: move out the example to Readme file
-import prioritizedCallbackControllerFactory from '../src/helpers/prioritized-callback-controller-factory';
 import { EVENTS } from '../src/constants';
 import globals from '../src/tool-specific-helpers/globals';
 
-const prioritizedCbController = prioritizedCallbackControllerFactory();
 
 function addPrioritizedDiv(priority) {
   const div = document.createElement('div');
   div.innerText = `* block with priority #${priority}`;
-  prioritizedCbController.addCallback(
+  window.prioritizedCallbackController.addCallback(
     EVENTS.LOAD_FEEDBACK,
     priority,
     () => {

@@ -9,9 +9,9 @@ const tableau = {
     }
   },
   TableauEventName: {
-    TOOLBAR_STATE_CHANGE: 'TOOLBAR_STATE_CHANGE',
-    CUSTOM_VIEW_LOAD: 'CUSTOM_VIEW_LOAD',
-    TAB_SWITCH: 'TAB_SWITCH',
+    TOOLBAR_STATE_CHANGE: 'toolbarstatechange',
+    CUSTOM_VIEW_LOAD: 'customviewload',
+    TAB_SWITCH: 'tabswitch',
   },
 };
 
