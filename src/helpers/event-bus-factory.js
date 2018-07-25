@@ -1,8 +1,9 @@
-import { EVENTS } from '../constants';
-
 function EventBus() {
   this.listeners = {};
-  this.eventNames = EVENTS;
+  // events to dispatch upwards to tool-independent modules
+  this.customEventNames = {
+    LOAD_FEEDBACK: 'LOAD_FEEDBACK'
+  };
 }
 
 EventBus.prototype.addEventListener = function(eventName, callback) {
