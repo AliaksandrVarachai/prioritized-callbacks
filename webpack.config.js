@@ -15,7 +15,7 @@ module.exports = function(env, argv) {
   const dist = path.resolve(__dirname, 'dist-' + env.tool);
 
   return {
-    entry: isWebpackDevServerStarted
+    entry: isWebpackDevServerStarted && !env.remoteTool
       ? {
         'prioritized-event-bus': ['./src/index', './resources/event-bus-test']
       }
