@@ -18,9 +18,9 @@
  */
 (function() {
   var scripts = {
-    'event-bus': {
-      srcPrefix: 'https://ecsb00100c96.epam.com:444/event-bus',
-      cookieTestKey: 'test_event_bus_path'
+    'prioritized-event-bus': {
+      srcPrefix: 'https://ecsb00100c96.epam.com:444/prioritized-event-bus',
+      cookieTestKey: 'test_peb_path'
     },
     'feedback-tool': {
       srcPrefix: 'https://ecsb00100c96.epam.com:444/feedback-tool',
@@ -51,8 +51,8 @@
   // Scripts ordered and configured for synch/async loading
   var loadedScripts = [
     {
-      id: 'event-bus-script', // lets event-bus-script listens Tableau CUSTOM
-      src: getSrc('event-bus'),
+      id: 'prioritized-event-bus-script', // lets event-bus-script listens Tableau CUSTOM
+      src: getSrc('prioritized-event-bus'),
       async: false
     }, {
       id: 'feedback-tool-script',
