@@ -59,10 +59,18 @@ PrioritizedCallbackController.prototype.addCallback = function(eventName, priori
   });
 };
 
+/**
+ * Allows or disallows to call callbacks at the moment when they are added.
+ * @param callCallbacksWhenAdd
+ */
 PrioritizedCallbackController.prototype.setCallCallbacksWhenAdd = function(callCallbacksWhenAdd) {
   this.callCallbacksWhenAdd = callCallbacksWhenAdd;
 };
 
+/**
+ * Gets whether the call of callbacks is allowed when they are added.
+ * @returns {boolean} - true if the call of callbacks is allowed and false otherwise.
+ */
 PrioritizedCallbackController.prototype.getCallCallbacksWhenAdd = function() {
   return this.callCallbacksWhenAdd;
 };
