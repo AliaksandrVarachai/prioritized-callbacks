@@ -1,5 +1,4 @@
 // TODO: move out the example to Readme file
-import { EVENTS } from '../src/constants';
 import globals from '../src/tool-specific-helpers/globals';
 
 
@@ -7,7 +6,7 @@ function addPrioritizedDiv(priority) {
   const div = document.createElement('div');
   div.innerText = `* block with priority #${priority}`;
   window.prioritizedCallbackController.addCallback(
-    EVENTS.LOAD_FEEDBACK,
+    window.eventBus.customEventNames.LOAD_FEEDBACK,
     priority,
     () => {
       document.body.appendChild(div);
@@ -36,3 +35,4 @@ globals.emulateEventsLocally(); // emulates events
 setTimeout(() => addPrioritizedDiv(10), 1000);
 setTimeout(() => addPrioritizedDiv(20), 500);
 addPrioritizedDiv(30);
+setTimeout(() => addPrioritizedDiv(40), 1200); // must call the callback (without call of rollbacks)

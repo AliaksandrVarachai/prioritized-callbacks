@@ -55,7 +55,7 @@ function emulateEventsLocally() {
   setTimeout(() => {
     console.log('emulation of async CUSTOM_VIEW_LOAD');
     visual.dispatchEvent(tableau.TableauEventName.CUSTOM_VIEW_LOAD);
-  }, 1500)
+  }, 2000)
 }
 
 
