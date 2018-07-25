@@ -40,12 +40,14 @@
 
   function getSrc(scriptName) {
     if (!scripts.hasOwnProperty(scriptName))
-      throw Error(`There is no script with name "${scriptName}"`);
+      throw Error('There is no script with name "' + scriptName + '"');
     var srcPrefix = scripts[scriptName].srcPrefix;
-    var cookieTestPath = cookies[scripts[scriptName].cookieTestKey];
-    return cookieTestPath
-      ? `${srcPrefix}/${cookieTestPath}/${scriptName}.js`
-      : `${srcPrefix}/${scriptName}.js`;
+    var cookieTestPath = decodeURIComponent(cookies[scripts[scriptName].cookieTestKey] || '');
+    if (cookieTestPath)
+      return /^localhost(:\d+)?$/i.test(cookieTestPath)
+        ? 'https://' + cookieTestPath + '/' + scriptName + '.js'
+        : srcPrefix + '/' + cookieTestPath + '/' + scriptName + '.js';
+    return srcPrefix + '/' + scriptName + '.js';
   }
 
   // Scripts ordered and configured for synch/async loading
@@ -65,15 +67,15 @@
       preloaders: [
         {
           type: 'application/javascript',
-          src: `${scripts['guided-tour'].srcPrefix}/jquery-3.2.1.min.js`,
+          src: scripts['guided-tour'].srcPrefix + '/jquery-3.2.1.min.js',
           async: false
         }, {
           type: 'application/javascript',
-          src: `${scripts['guided-tour'].srcPrefix}/bootstrap_guided_tour.js`,
+          src: scripts['guided-tour'].srcPrefix + '/bootstrap_guided_tour.js',
           async: false
         }, {
           type: 'text/css',
-          href: `${scripts['guided-tour'].srcPrefix}/bootstrap_guided_tour.css`,
+          href: scripts['guided-tour'].srcPrefix + '/bootstrap_guided_tour.css'
         }
       ]
     }
@@ -100,7 +102,7 @@
             preloaderElement.href = preloader.href;
             break;
           default:
-            console.log(`Type "${preloader.script}" is not supported for script ${preloader.path}`)
+            console.log('Type "' + preloader.script + '" is not supported for script ' + preloader.path);
         }
         document.head.appendChild(preloaderElement);
       });
