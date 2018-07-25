@@ -18,35 +18,45 @@ function PrioritizedCallbackController() {
   this.callCallbacksWhenAdd = false; // callbacks must be disabled until the tool's DOM is ready
 }
 
+/**
+ * Launches callbacks according to their unique priority (than less the priority then earlier the callback launched).
+ * @param eventName {string|Array.<string>} - name of event to be subscribed to.
+ * @param priority {number} - priority of event.
+ * @param callback {function} - callback to be launched according to its priority.
+ * @param rollback {function} - rollback to be executed when priority was changed.
+ */
 PrioritizedCallbackController.prototype.addCallback = function(eventName, priority, callback, rollback) {
-  const pEvent = this.pEvents[eventName];
-  if (!pEvent) {
-    this.pEvents[eventName] = {
-      priorities: [priority],
-      callbacks: [callback],
-      rollbacks: [rollback]
-    };
-    eventBus.addEventListener(eventName, () => this.runCallbacks(eventName));
-    if (this.callCallbacksWhenAdd)
-      this.runCallbacks(eventName);
-    return;
-  }
-
-  // TODO: call rollback only when order of priorities is changed
-  if (this.callCallbacksWhenAdd)
-    this.runRollbacks(eventName);
-  for (let i = 0; i < pEvent.priorities.length; i++) {
-    if (priority === pEvent.priorities[i])
-      throw Error(`Priority ${priority} of "${eventName}" is already used. The list of used priorities: [${pEvent.priorities.join()}]`);
-    if (priority < pEvent.priorities[i]) {
-      pEvent.priorities.splice(i, 0, priority);
-      pEvent.callbacks.splice(i, 0, callback);
-      pEvent.rollbacks.splice(i, 0, rollback);
-      break;
+  const eventNames = Array.isArray(eventName) ? eventName : [eventName];
+  eventNames.forEach(_eventName => {
+    const pEvent = this.pEvents[_eventName];
+    if (!pEvent) {
+      this.pEvents[_eventName] = {
+        priorities: [priority],
+        callbacks: [callback],
+        rollbacks: [rollback]
+      };
+      eventBus.addEventListener(_eventName, () => this.runCallbacks(_eventName));
+      if (this.callCallbacksWhenAdd)
+        this.runCallbacks(_eventName);
+      return;
     }
-  }
-  if (this.callCallbacksWhenAdd)
-    this.runCallbacks(eventName);
+
+    // TODO: call rollback only when order of priorities is changed
+    if (this.callCallbacksWhenAdd)
+      this.runRollbacks(_eventName);
+    for (let i = 0; i < pEvent.priorities.length; i++) {
+      if (priority === pEvent.priorities[i])
+        throw Error(`Priority ${priority} of "${_eventName}" is already used. The list of used priorities: [${pEvent.priorities.join()}]`);
+      if (priority < pEvent.priorities[i]) {
+        pEvent.priorities.splice(i, 0, priority);
+        pEvent.callbacks.splice(i, 0, callback);
+        pEvent.rollbacks.splice(i, 0, rollback);
+        break;
+      }
+    }
+    if (this.callCallbacksWhenAdd)
+      this.runCallbacks(_eventName);
+  });
 };
 
 PrioritizedCallbackController.prototype.runCallbacks = function(eventName) {
