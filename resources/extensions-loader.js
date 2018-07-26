@@ -43,10 +43,13 @@
       throw Error('There is no script with name "' + scriptName + '"');
     var srcPrefix = scripts[scriptName].srcPrefix;
     var cookieTestPath = decodeURIComponent(cookies[scripts[scriptName].cookieTestKey] || '');
-    if (cookieTestPath)
-      return /^localhost(:\d+)?$/i.test(cookieTestPath)
+    if (cookieTestPath) {
+      var src = /^localhost(:\d+)?$/i.test(cookieTestPath)
         ? 'https://' + cookieTestPath + '/' + scriptName + '.js'
         : srcPrefix + '/' + cookieTestPath + '/' + scriptName + '.js';
+      console.log(scriptName + ' is provided from ' + src);
+      return src;
+    }
     return srcPrefix + '/' + scriptName + '.js';
   }
 
