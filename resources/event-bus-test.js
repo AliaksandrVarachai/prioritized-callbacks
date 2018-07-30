@@ -1,12 +1,16 @@
 // TODO: move out the example to Readme file
 import globals from '../src/tool-specific-helpers/globals';
 
+const eventBus = window.eventBus;
 
 function addPrioritizedDiv(priority) {
   const div = document.createElement('div');
   div.innerText = `* block with priority #${priority}`;
   window.prioritizedEventBus.addEventListener(
-    window.eventBus.customEventNames.LOAD_FEEDBACK,
+    eventBus.toSourcedEventName(
+      eventBus.customEventNames.LOAD_FEEDBACK,
+      eventBus.eventSources.CUSTOM
+    ),
     priority,
     () => {
       document.body.appendChild(div);
@@ -27,7 +31,7 @@ const descriptionDiv = document.createElement('div');
 document.body.innerHTML =
   '<div style="padding-bottom: 10px">' +
     'Here should be a list of blocks sorted in ascending order by the priority (to see the log open the console):' +
-  '</div>'
+  '</div>';
 document.body.appendChild(descriptionDiv);
 
 globals.emulateEventsLocally(); // emulates events
