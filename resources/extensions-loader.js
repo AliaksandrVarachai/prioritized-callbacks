@@ -1,20 +1,9 @@
-// TODO: rewrite jsdoc
 /**
- * That script need to separate developing process from affecting of other users.
- * IMPORTANT: That script must not be used on production. The loading of Feedback Tool script by the document must be direct.
- *
- * @example <caption>Example of the direct injecting of Feedback Tool script on production</caption>
- * <script src=""https://ecsb00100c96.epam.com:444/feedback-tool/feedback-tool.js"></script>
- *
- * @example <caption>Example of using Feedback Tool Preloader on development</caption>
- * <script src=""https://ecsb00100c96.epam.com:444/feedback-tool/feedback-tool-preloader.js"></script>
- * // The preloader script checks test_ft_path cookies and chooses the path to feedback-tool.js according to next algorithm:
- * // if test_ft_path = localhost%3A9092 (where port 9092 could be replaced with another one):
- * //   src = https://localhost:9092/feedback-tool.js
- * // else if test_ft_path = 'custom_path':
- * //   src = https://ecsb00100c96.epam.com:444/feedback-tool/custom_path/feedback-tool.js
- * // else
- * //   src = https://ecsb00100c96.epam.com:444/feedback-tool/feedback-tool.js
+ * That script:
+ * 1. provides the control over the loading tool and extensions
+ * 2. separates the developing process from affecting of other users
+ * The idea is the loading of prioritized-event-bus.js synchronously before any tool scripts to provide the reliable
+ * eventListener for the tool loaded event. Other extensions might be loaded asynchronously or in their own way.
  */
 (function() {
   var scripts = {
