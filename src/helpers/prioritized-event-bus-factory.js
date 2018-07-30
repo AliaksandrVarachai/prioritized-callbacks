@@ -66,7 +66,7 @@ PrioritizedEventBus.prototype.addEventListener = function(eventName, priority, c
 
 /**
  * Allows or disallows to call callbacks at the moment when they are added.
- * @param areCallbacksAllowed
+ * @param areCallbacksAllowed {boolean} - true when callback can be run or false otherwise.
  */
 PrioritizedEventBus.prototype.setAreCallbacksAllowed = function(areCallbacksAllowed) {
   this.areCallbacksAllowed = areCallbacksAllowed;
@@ -81,12 +81,16 @@ PrioritizedEventBus.prototype.getAreCallbacksAllowed = function() {
 };
 
 PrioritizedEventBus.prototype._runCallbacks = function(eventName) {
+  if (!this.areCallbacksAllowed)
+    return;
   if (!this.pEvents[eventName])
     throw Error(`No callbacks for bus event "${eventName}"`);
   this.pEvents[eventName].callbacks.forEach(callback => callback());
 };
 
 PrioritizedEventBus.prototype._runRollbacks = function(eventName) {
+  if (!this.areCallbacksAllowed)
+    return;
   if (!this.pEvents[eventName])
     throw Error(`No rollbacks for bus event "${eventName}"`);
   this.pEvents[eventName].rollbacks.forEach(rollback => rollback());
