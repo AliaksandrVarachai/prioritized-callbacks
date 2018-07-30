@@ -2,7 +2,7 @@ import eventBusFactory from './event-bus-factory';
 
 const eventBus = eventBusFactory();
 
-function PrioritizedCallbackController() {
+function PrioritizedEventBus() {
   /**
    * An object stores events processors according to their priorities. Each priority must be unique.
    * @typedef {Object} prioritizedEvent
@@ -15,7 +15,7 @@ function PrioritizedCallbackController() {
    * @type {prioritizedEvent}
    */
   this.pEvents = {};
-  this.callCallbacksWhenAdd = false; // callbacks must be disabled until the tool's DOM is ready
+  this.areCallbacksAllowed = false; // callbacks must be disabled until the tool's DOM is ready
 }
 
 /**
@@ -25,7 +25,7 @@ function PrioritizedCallbackController() {
  * @param callback {function} - callback to be launched according to its priority.
  * @param rollback {function} - rollback to be executed when priority was changed.
  */
-PrioritizedCallbackController.prototype.addCallback = function(eventName, priority, callback, rollback) {
+PrioritizedEventBus.prototype.addEventListener = function(eventName, priority, callback, rollback) {
   const eventNames = Array.isArray(eventName) ? eventName : [eventName];
   eventNames.forEach(_eventName => {
     const pEvent = this.pEvents[_eventName];
@@ -36,7 +36,7 @@ PrioritizedCallbackController.prototype.addCallback = function(eventName, priori
         rollbacks: [rollback]
       };
       eventBus.addEventListener(_eventName, () => this._runCallbacks(_eventName));
-      if (this.callCallbacksWhenAdd)
+      if (this.areCallbacksAllowed)
         this._runCallbacks(_eventName);
       return;
     }
@@ -49,12 +49,12 @@ PrioritizedCallbackController.prototype.addCallback = function(eventName, priori
       if (priority < pEvent.priorities[indexToInsert])
         break;
     }
-    if (this.callCallbacksWhenAdd && indexToInsert < pEvent.priorities.length)
+    if (this.areCallbacksAllowed && indexToInsert < pEvent.priorities.length)
       this._runRollbacks(_eventName);
     pEvent.priorities.splice(indexToInsert, 0, priority);
     pEvent.callbacks.splice(indexToInsert, 0, callback);
     pEvent.rollbacks.splice(indexToInsert, 0, rollback);
-    if (this.callCallbacksWhenAdd) {
+    if (this.areCallbacksAllowed) {
       if (indexToInsert < pEvent.priorities.length - 1) {
         this._runCallbacks(_eventName);
       } else {
@@ -66,38 +66,38 @@ PrioritizedCallbackController.prototype.addCallback = function(eventName, priori
 
 /**
  * Allows or disallows to call callbacks at the moment when they are added.
- * @param callCallbacksWhenAdd
+ * @param areCallbacksAllowed
  */
-PrioritizedCallbackController.prototype.setCallCallbacksWhenAdd = function(callCallbacksWhenAdd) {
-  this.callCallbacksWhenAdd = callCallbacksWhenAdd;
+PrioritizedEventBus.prototype.setAreCallbacksAllowed = function(areCallbacksAllowed) {
+  this.areCallbacksAllowed = areCallbacksAllowed;
 };
 
 /**
  * Gets whether the call of callbacks is allowed when they are added.
  * @returns {boolean} - true if the call of callbacks is allowed and false otherwise.
  */
-PrioritizedCallbackController.prototype.getCallCallbacksWhenAdd = function() {
-  return this.callCallbacksWhenAdd;
+PrioritizedEventBus.prototype.getAreCallbacksAllowed = function() {
+  return this.areCallbacksAllowed;
 };
 
-PrioritizedCallbackController.prototype._runCallbacks = function(eventName) {
+PrioritizedEventBus.prototype._runCallbacks = function(eventName) {
   if (!this.pEvents[eventName])
     throw Error(`No callbacks for bus event "${eventName}"`);
   this.pEvents[eventName].callbacks.forEach(callback => callback());
 };
 
-PrioritizedCallbackController.prototype._runRollbacks = function(eventName) {
+PrioritizedEventBus.prototype._runRollbacks = function(eventName) {
   if (!this.pEvents[eventName])
     throw Error(`No rollbacks for bus event "${eventName}"`);
   this.pEvents[eventName].rollbacks.forEach(rollback => rollback());
 };
 
-let singletonPrioritizedCallbackController;
+let singletonPrioritizedEventBus;
 
 /**
  * Creates a singleton PrioritizedCallbackController instance.
  * @returns {EventBus}
  */
 export default function() {
-  return singletonPrioritizedCallbackController = singletonPrioritizedCallbackController || new PrioritizedCallbackController();
+  return singletonPrioritizedEventBus = singletonPrioritizedEventBus || new PrioritizedEventBus();
 }

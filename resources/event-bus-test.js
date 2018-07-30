@@ -5,7 +5,7 @@ import globals from '../src/tool-specific-helpers/globals';
 function addPrioritizedDiv(priority) {
   const div = document.createElement('div');
   div.innerText = `* block with priority #${priority}`;
-  window.prioritizedCallbackController.addCallback(
+  window.prioritizedEventBus.addEventListener(
     window.eventBus.customEventNames.LOAD_FEEDBACK,
     priority,
     () => {

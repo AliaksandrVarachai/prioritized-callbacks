@@ -1,9 +1,10 @@
 import globals from '../globals';
 import eventBusFactory from '../../helpers/event-bus-factory';
-import prioritizedCallbackControllerFactory from '../../helpers/prioritized-callback-controller-factory';
+import prioritizedEventBusFactory from '../../helpers/prioritized-event-bus-factory';
 
-window.eventBus = eventBusFactory();
-window.prioritizedCallbackController = prioritizedCallbackControllerFactory();
+const eventBus = window.eventBus = eventBusFactory();
+const prioritizedEventBus = window.prioritizedEventBus = prioritizedEventBusFactory();
+const tableau = globals.tableau;
 
 /**
  * Guarantees the controlled loading of Tableau script.
@@ -11,21 +12,21 @@ window.prioritizedCallbackController = prioritizedCallbackControllerFactory();
  * Dispatches event EVENTS.LOAD_FEEDBACK when Tableau view is reloaded.
  */
 function run() {
-  const viz = globals.tableau.VizManager.getVizs()[0];
+  const viz = tableau.VizManager.getVizs()[0];
 
 
-  viz.addEventListener(globals.tableau.TableauEventName.CUSTOM_VIEW_LOAD, function(event) {
+  viz.addEventListener(tableau.TableauEventName.CUSTOM_VIEW_LOAD, function(event) {
     console.log('CUSTOM_VIEW_LOAD is called');
     // First CUSTOM_VIEW_LOAD event might be fired before our script creates a proper listener
-    window.prioritizedCallbackController.setCallCallbacksWhenAdd(true); // TODO: call just only for the first time
-    window.eventBus.dispatch(window.eventBus.customEventNames.LOAD_FEEDBACK, {}); // UP: updates data from DB (async)
-    window.eventBus.dispatch(globals.tableau.TableauEventName.CUSTOM_VIEW_LOAD, {}); // DOWN: redraw buttons
+    prioritizedEventBus.setAreCallbacksAllowed(true);
+    eventBus.dispatch(eventBus.customEventNames.LOAD_FEEDBACK, {});   // UP: updates data from DB (async)
+    eventBus.dispatch(tableau.TableauEventName.CUSTOM_VIEW_LOAD, {}); // DOWN: redraw buttons
   });
 
 
-  viz.addEventListener(globals.tableau.TableauEventName.TOOLBAR_STATE_CHANGE, function(event) {
+  viz.addEventListener(tableau.TableauEventName.TOOLBAR_STATE_CHANGE, function(event) {
     console.log('TOOLBAR_STATE_CHANGE is called');
-    window.eventBus.dispatch(globals.tableau.TableauEventName.TOOLBAR_STATE_CHANGE, {}); // DOWN: redraw buttons
+    window.eventBus.dispatch(tableau.TableauEventName.TOOLBAR_STATE_CHANGE, {}); // DOWN: redraw buttons
   });
 
 
